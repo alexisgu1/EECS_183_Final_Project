@@ -28,9 +28,15 @@ void Game::playGame(bool isAIModeIn, ifstream& gameFile) {
     printGameStartPrompt();
     initGame(gameFile);
 
+    if (!gameFile.is_open()) {
+        isAIMode = true;
+        exit(1);
+    }
+    
     while (true) {
         int src = floorDist(gen);
         int dst = floorDist(gen);
+        
         if (src != dst) {
             std::stringstream ss;
             ss << "0f" << src << "t" << dst << "a" << angerDist(gen);
@@ -43,6 +49,13 @@ void Game::playGame(bool isAIModeIn, ifstream& gameFile) {
         checkForGameEnd();
 
         Move nextMove = getMove();
+        if (isAIMode) {
+            nextMove = getMove(); // Assuming there's a method to get AI move
+        }
+        else {
+            nextMove = getMove();
+        }
+        
         update(nextMove);
     }
 }
